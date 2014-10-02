@@ -44,11 +44,12 @@ exports.isUrlInList = function(list, url){
 exports.addUrlToList = function(list, url){
   list.push(url);
   // write to file
-  fs.appendFile(exports.paths.list, "\n" + url.toString(), function(err){
+  fs.appendFile(exports.paths.list, url.toString() + "\n" , function(err){
     if (err) {
       throw err;
     }
   });
+  exports.downloadUrls(url);
 };
 
 exports.isURLArchived = function(url){
@@ -56,5 +57,20 @@ exports.isURLArchived = function(url){
 };
 
 exports.downloadUrls = function(url){
-
+  http.get("http://" + url, function(res) {
+    console.log("Got response: " + res.statusCode);
+    var str = '';
+    res.on('data', function(data){
+      str += data;
+    });
+    res.on('end', function(data){
+      fs.writeFile(exports.paths.archivedSites + '/' + url, str, function(err){
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 };

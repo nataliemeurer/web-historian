@@ -63,12 +63,20 @@ exports.handleRequest = function (req, res) {
       req.on('end', function(){
         // Parse data
         var newEarl = body.split("=")[1];
-        archive.addUrlToList(siteList, newEarl);
-        // Send to cron job
-        var help = helpers.headers;
-        help['Location'] = '/loading';
-        res.writeHead(302, help);
-        res.end();
+        if (archive.isURLArchived(newEarl)){
+          console.log("ARCHIVED", newEarl);
+          var help = helpers.headers;
+          help['Location'] = '/archives/sites/' + newEarl;
+          res.writeHead(302, help);
+          res.end();
+        } else {
+          archive.addUrlToList(siteList, newEarl);
+          // Send to cron job
+          var help = helpers.headers;
+          help['Location'] = '/loading';
+          res.writeHead(302, help);
+          res.end();
+        }
       });
     }
   } else{
