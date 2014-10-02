@@ -36,14 +36,14 @@ exports.readListOfUrls = function(callback){
   });
 };
 
-exports.isUrlInList = function(url, list){
+exports.isUrlInList = function(list, url){
   return _.contains(list, url);
 };
 
-exports.addUrlToList = function(url, list){
+exports.addUrlToList = function(list, url){
   list.push(url);
   // write to file
-  fs.appendFile(exports.paths.list, url.toString(), function(err){
+  fs.appendFile(exports.paths.list, "\n" + url.toString(), function(err){
     if (err) {
       throw err;
     }

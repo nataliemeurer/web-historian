@@ -4,3 +4,9 @@ body {
   background-color: #16a085;
   color: #ecf0f1;
 }
+
+img {
+  height: 285px;
+  width: 249px;
+  z-index: 9999;
+}
